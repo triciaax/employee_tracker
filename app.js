@@ -1,6 +1,7 @@
 var inquirer = require("inquirer");
 const fs = require("fs");
 const generatePage = require("./src/page-template");
+const { allowedNodeEnvironmentFlags } = require("process");
 
 // const pageHTML = generatePage(name, github);
 
@@ -19,7 +20,7 @@ const promptUser = () => {
       choices: [
         "View all Employees",
         "Add Employees",
-        "Add Employee Role",
+        "Add Employee",
         "View All Roles",
         "Add Role",
         "View All Departments",
@@ -27,5 +28,33 @@ const promptUser = () => {
         "Quit"],
     }
   ])
-  
-}
+
+  // responses to answers 
+  .then((answers) => {
+    const { choices } = answers; 
+
+    if (choices === "View All Employees") {
+        showRoles();
+      }
+
+    if (choices === "Add Employee Role") { 
+        addEmployee();
+    }
+
+    if (choices === "View All Roles") {
+        showRoles();
+    }
+
+    if (choices === "Add Role") {
+        addRole();
+    }
+
+    if (choices === "View All Departments") {
+      showDepartments();
+    }
+
+    if (choices === "Add Departments") {
+        addDepartments();
+    };
+});
+};
