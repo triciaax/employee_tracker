@@ -54,7 +54,11 @@ const promptUser = () => {
         }
 
         if (name === "Add Department") {
-          addDepartments();
+          addDepartment();
+        }
+
+        if (name === "Update Employee Role") {
+          updateEmployeeRole();
         }
       })
   );
@@ -65,7 +69,7 @@ viewDepartments = () => {
   const sql = `SELECT department.id AS id, department.name AS department 
     FROM department`;
 
-  connection.promise().query(sql, (err, rows) => {
+  connection.query(sql, (err, rows) => {
     if (err) throw err;
     console.table(rows);
     promptUser();
@@ -77,7 +81,7 @@ viewRoles = () => {
     FROM role
     INNER JOIN department ON role.department_id = department.id`;
 
-  connection.promise().query(sql, (err, rows) => {
+  connection.query(sql, (err, rows) => {
     if (err) throw err;
     console.table(rows);
     promptUser();
@@ -159,7 +163,7 @@ addEmployee = () => {
   
                 const managerSql = `SELECT * FROM employee`;
   
-                connection.promise().query(managerSql, (err, data) => {
+                connection.query(managerSql, (err, data) => {
                   if (err) throw err;
   
                   const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
@@ -175,8 +179,13 @@ addEmployee = () => {
                     }
                   ])
                     .then(managerChoice => {
-                      const manager = managerChoice.manager;
-                      params.push(manager);
+                        if (managerChoice.manager) {
+                            const manager = managerChoice.manager;
+                            params.push(manager);
+                        } else {
+                            params.push("")
+                        }
+                      
   
                       const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
                       VALUES (?, ?, ?, ?)`;
@@ -185,7 +194,7 @@ addEmployee = () => {
                       if (err) throw err;
                       console.log("Employee has been added")
   
-                      showEmployees();
+                      viewEmployees();
                 });
               });
             });
@@ -218,7 +227,7 @@ addDepartment = () => {
           if (err) throw err;
           console.log('Added ' + answer.addDept + " to departments!"); 
   
-          showDepartments();
+          viewDepartments();
       });
     });
   };
@@ -281,11 +290,41 @@ addRole = () => {
   
               connection.query(sql, params, (err, result) => {
                 if (err) throw err;
-                showRoles();
+                viewRoles();
          });
        });
      });
    });
   };
+
+  //function to add a department 
+addDepartment = () => {
+    inquirer.prompt([
+      {
+        type: 'input', 
+        name: 'addDept',
+        message: "What department do you want to add?",
+        validate: addDept => {
+          if (addDept) {
+              return true;
+          } else {
+              console.log('Please enter a department');
+              return false;
+          }
+        }
+      }
+    ])
+      .then(answer => {
+        const sql = `INSERT INTO department (name)
+                    VALUES (?)`;
+        connection.query(sql, answer.addDept, (err, result) => {
+          if (err) throw err;
+          console.log('Added ' + answer.addDept + " to departments!"); 
+  
+          viewDepartments();
+      });
+    });
+  };
+  
   
   promptUser();
