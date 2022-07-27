@@ -172,7 +172,7 @@ addEmployee = () => {
                 name: first_name + " " + last_name,
                 value: id,
               }));
-
+              managers.push({ name: "None", value: 0 });
               // console.log(managers);
 
               inquirer
@@ -185,22 +185,27 @@ addEmployee = () => {
                   },
                 ])
                 .then((managerChoice) => {
-                  if (managerChoice.manager) {
+                  if (managerChoice.manager !== 0) {
                     const manager = managerChoice.manager;
                     params.push(manager);
-                  } else {
-                    params.push("");
-                  }
-
-                  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
                       VALUES (?, ?, ?, ?)`;
+                    connection.query(sql, params, (err, result) => {
+                      if (err) throw err;
+                      console.log("Employee has been added");
 
-                  connection.query(sql, params, (err, result) => {
-                    if (err) throw err;
-                    console.log("Employee has been added");
+                      viewEmployees();
+                    });
+                  } else {
+                    const sql = `INSERT INTO employee (first_name, last_name, role_id)
+                        VALUES (?, ?, ?)`;
+                    connection.query(sql, params, (err, result) => {
+                      if (err) throw err;
+                      console.log("Employee has been added");
 
-                    viewEmployees();
-                  });
+                      viewEmployees();
+                    });
+                  }
                 });
             });
           });
