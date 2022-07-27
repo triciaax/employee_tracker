@@ -10,9 +10,9 @@ This is a command line application written in Node JS to track employees for a c
 5. add an employee with the created role - The first employee cannot have a manager
    
 ## Screenshot
-![screenshot](../screenshots/screen.png)
+![screenshot](screenshots/screen.png)
 
 ## Video
 [Video Link Here](https://bootcampspot.instructuremedia.com/embed/f8df65e1-a84d-4e3f-a9ef-df82bf473473)
 
-[![Watch the video](../screenshots/video-screen.png)](https://bootcampspot.instructuremedia.com/embed/f8df65e1-a84d-4e3f-a9ef-df82bf473473)
+[![Watch the video](screenshots/video-screen.png)](https://bootcampspot.instructuremedia.com/embed/f8df65e1-a84d-4e3f-a9ef-df82bf473473)
