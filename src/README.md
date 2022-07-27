@@ -2,7 +2,7 @@
 ## Description
 This is a command line application written in Node JS to track employees for a company. This application is the front end of a MySQL database. You can use it to create departments, roles with salaries, and employees with roles and managers.
 
-## How to use this
+## How to use this application
 1. pull this repository and run npm install in the root directory
 2. run `node app` to start the application
 3. create a new department
